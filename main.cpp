@@ -36,6 +36,46 @@ class Registry
 
     }
 
+    void remove(const Key & key)
+    {
+      bool found = false;
+      for(auto& entry : data)
+      {
+        auto it = entry.find(key);
+     
+      if(it != entry.end())
+      {
+         entry.erase(it);
+         found = true;
+      }
+    }
+    if(!found)
+    {
+      throw invalid_argument("key not found");
+    }
+   }
+
+   vector <Value> find(const Key& key)
+   {
+    bool found = false;
+    vector <Value> result;
+    for(auto& entry : data)
+    {
+      auto it = entry.find(key);
+
+      if(it != entry.end())
+      {
+        result.push_back(it->second);
+        found = true;
+      }
+    }
+    if(!found)
+    {
+      throw invalid_argument("key not found");
+    }
+    return result;
+   }
+
 
 
 };
@@ -67,6 +107,42 @@ int main()
        registry.print();
     }
 
+      else if(command == "remove")
+    {
+       cout << "enter key: ";
+       cin >> key;
+       try
+       {
+        registry.remove(key);
+       }
+       catch(const invalid_argument& e)
+       {
+        std::cerr << e.what() << '\n';
+       }
+            
+    }
+
+     else if(command == "find")
+     {
+        cout << "enter key: ";
+        cin >> key;
+        try
+        {
+         vector <string> values = registry.find(key);
+         cout << "values faund: ";
+         for(auto& value : values)
+        {
+          cout << value << " ";
+        }
+        cout << endl;
+        }
+        catch(const invalid_argument& e)
+        {
+          std::cerr << e.what() << '\n';
+        }
+        
+        
+     }
  }
     
  return 0;
